@@ -1,0 +1,306 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formateur IA - g2soire</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1100px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4a3f8f, #6b5bb5);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+            header h1 {
+                font-size: 26px;
+            }
+
+            header p {
+                font-size: 13px;
+                opacity: 0.9;
+                margin-top: 4px;
+            }
+
+        .video-wrap {
+            padding: 24px;
+            text-align: center;
+        }
+
+        #persona-video {
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 16px;
+            background: #000;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+        }
+
+        .controls {
+            text-align: center;
+            padding: 0 20px 15px;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 0 6px;
+            transition: transform 0.1s;
+        }
+
+            button:active {
+                transform: scale(0.96);
+            }
+
+        #start-button {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        #stop-button {
+            background: #f44336;
+            color: #fff;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        #status {
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            padding: 0 20px 12px;
+        }
+
+        .chat-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #4a3f8f;
+            padding: 14px 24px 6px;
+            border-top: 1px solid #eee;
+        }
+
+        #chat {
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .msg {
+            max-width: 75%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+            .msg.user {
+                align-self: flex-end;
+                background: #4a3f8f;
+                color: #fff;
+                border-bottom-right-radius: 4px;
+            }
+
+            .msg.persona {
+                align-self: flex-start;
+                background: #f0f0f5;
+                color: #333;
+                border-bottom-left-radius: 4px;
+            }
+
+            .msg .who {
+                font-size: 11px;
+                opacity: 0.7;
+                margin-bottom: 3px;
+                display: block;
+            }
+
+        .empty {
+            text-align: center;
+            color: #aaa;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            padding: 12px 24px 24px;
+            border-top: 1px solid #eee;
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 12px 16px;
+            font-size: 14px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            outline: none;
+        }
+
+            #message-input:focus {
+                border-color: #4a3f8f;
+            }
+
+        #send-button {
+            background: #4a3f8f;
+            color: #fff;
+            padding: 12px 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Formateur IA - g2soire</h1>
+            <p>Parlez au micro OU écrivez votre question ci-dessous</p>
+        </header>
+
+        <div class="video-wrap">
+            <video id="persona-video" autoplay playsinline></video>
+        </div>
+
+        <div class="controls">
+            <button id="start-button">▶ Démarrer</button>
+            <button id="stop-button" disabled>⏹ Arrêter</button>
+        </div>
+
+        <div id="status">Prêt à démarrer.</div>
+
+        <div class="chat-title">💬 Conversation</div>
+        <div id="chat">
+            <div class="empty">La conversation apparaîtra ici...</div>
+        </div>
+
+        <div class="chat-input">
+            <input type="text" id="message-input" placeholder="Écrivez votre question ici..." disabled />
+            <button id="send-button" disabled>Envoyer</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from "https://esm.sh/@anam-ai/js-sdk@latest";
+
+        let anamClient = null;
+        const startButton = document.getElementById("start-button");
+        const stopButton = document.getElementById("stop-button");
+        const statusEl = document.getElementById("status");
+        const chatEl = document.getElementById("chat");
+        const messageInput = document.getElementById("message-input");
+        const sendButton = document.getElementById("send-button");
+
+        function renderMessages(messages) {
+            chatEl.innerHTML = "";
+            if (!messages || messages.length === 0) {
+                chatEl.innerHTML = '<div class="empty">La conversation apparaîtra ici...</div>';
+                return;
+            }
+            messages.forEach(m => {
+                const div = document.createElement("div");
+                const isUser = m.role === "user";
+                div.className = "msg " + (isUser ? "user" : "persona");
+                div.innerHTML = '<span class="who">' + (isUser ? "Vous" : "Formateur") + '</span>' + m.content;
+                chatEl.appendChild(div);
+            });
+            chatEl.scrollTop = chatEl.scrollHeight;
+        }
+
+        async function startChat() {
+            try {
+                startButton.disabled = true;
+                statusEl.textContent = "Connexion en cours...";
+
+                const response = await fetch("/api/FormateurIA/session-token", { method: "POST" });
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error("Backend erreur " + response.status);
+                }
+                const data = await response.json();
+                const sessionToken = data.sessionToken;
+
+                anamClient = createClient(sessionToken);
+
+                anamClient.addListener("MESSAGE_HISTORY_UPDATED", (messages) => {
+                    renderMessages(messages);
+                });
+
+                await anamClient.streamToVideoElement("persona-video");
+
+                stopButton.disabled = false;
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+                statusEl.textContent = "✅ Connecté ! Parlez ou écrivez votre question.";
+            } catch (error) {
+                console.error("ERREUR:", error);
+                statusEl.textContent = "❌ Erreur : " + error.message;
+                startButton.disabled = false;
+            }
+        }
+
+        function stopChat() {
+            if (anamClient) {
+                anamClient.stopStreaming();
+                anamClient = null;
+            }
+            startButton.disabled = false;
+            stopButton.disabled = true;
+            messageInput.disabled = true;
+            sendButton.disabled = true;
+            statusEl.textContent = "Session arrêtée.";
+        }
+
+        async function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text || !anamClient) return;
+            try {
+                await anamClient.talk(text);
+                messageInput.value = "";
+            } catch (error) {
+                console.error("Erreur envoi:", error);
+            }
+        }
+
+        startButton.addEventListener("click", startChat);
+        stopButton.addEventListener("click", stopChat);
+        sendButton.addEventListener("click", sendMessage);
+        messageInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") sendMessage();
+        });
+    </script>
+</body>
+</html>
