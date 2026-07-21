@@ -49,4 +49,19 @@ public class SessionController : ControllerBase
         _service.DeleteSession(id);
         return Ok(new { message = "Session supprimée." });
     }
+
+    // POST /api/Session/inscrire?userId=1&sessionId=1
+    [HttpPost("inscrire")]
+    public IActionResult Inscrire(int userId, int sessionId)
+    {
+        try
+        {
+            _service.Inscrire(userId, sessionId);
+            return Ok(new { message = "Apprenant inscrit avec succès." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }
