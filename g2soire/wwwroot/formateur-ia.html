@@ -288,7 +288,7 @@
             const text = messageInput.value.trim();
             if (!text || !anamClient) return;
             try {
-                await anamClient.talk(text);
+                await anamClient.sendUserMessage(text);
                 messageInput.value = "";
             } catch (error) {
                 console.error("Erreur envoi:", error);
