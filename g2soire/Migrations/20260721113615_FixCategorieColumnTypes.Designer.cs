@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using g2soire.Data;
 
@@ -10,9 +11,11 @@ using g2soire.Data;
 namespace g2soire.Migrations
 {
     [DbContext(typeof(AppContex))]
-    partial class AppContexModelSnapshot : ModelSnapshot
+    [Migration("20260721113615_FixCategorieColumnTypes")]
+    partial class FixCategorieColumnTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
