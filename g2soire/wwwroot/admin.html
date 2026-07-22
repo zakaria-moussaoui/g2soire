@@ -30,6 +30,7 @@
             color: var(--text);
             font-family: 'Inter',sans-serif;
             display: flex;
+            flex-direction: column;
             min-height: 100vh;
         }
 
@@ -42,6 +43,43 @@
             font-family: 'JetBrains Mono',monospace;
         }
 
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 28px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+        }
+
+            .topbar a.back {
+                color: var(--text-dim);
+                text-decoration: none;
+                font-family: 'JetBrains Mono',monospace;
+                font-size: 12px;
+                letter-spacing: .02em;
+            }
+
+                .topbar a.back:hover {
+                    color: var(--accent);
+                }
+
+            .topbar .author {
+                font-family: 'JetBrains Mono',monospace;
+                font-size: 12px;
+                color: var(--text-dim);
+            }
+
+                .topbar .author strong {
+                    color: var(--text);
+                    font-weight: 500;
+                }
+
+        .layout {
+            display: flex;
+            flex: 1;
+        }
+
         nav {
             width: 220px;
             flex-shrink: 0;
@@ -50,7 +88,7 @@
             padding: 24px 0;
             position: sticky;
             top: 0;
-            height: 100vh;
+            height: calc(100vh - 53px);
         }
 
             nav .brand {
@@ -286,336 +324,343 @@
 </head>
 <body>
 
-    <nav>
-        <div class="brand">
-            <div class="eyebrow">g2soire</div>
-            <h1>Administration</h1>
-        </div>
-        <button class="tab active" data-section="categorie">Catégories</button>
-        <button class="tab" data-section="formateur">Formateurs</button>
-        <button class="tab" data-section="formation">Formations</button>
-        <button class="tab" data-section="module">Modules</button>
-        <button class="tab" data-section="contenu">Contenus</button>
-        <button class="tab" data-section="user">Apprenants</button>
-        <button class="tab" data-section="session">Sessions &amp; inscriptions</button>
-    </nav>
+    <div class="topbar">
+        <a class="back" href="/">← Retour à l'accueil</a>
+        <div class="author">g2soire · Projet par <strong>Zakaria Moussaoui</strong></div>
+    </div>
 
-    <main>
-
-        <section class="section active" id="sec-categorie">
-            <div class="section-head"><h2>Catégories</h2><span class="count mono" id="count-categorie"></span></div>
-            <div class="card">
-                <h3>Ajouter une catégorie</h3>
-                <div class="form-grid"><div><label>Nom</label><input id="cat-nom" placeholder="Développement Web"></div></div>
-                <button class="btn" onclick="addCategorie()">Ajouter</button>
+    <div class="layout">
+        <nav>
+            <div class="brand">
+                <div class="eyebrow">g2soire</div>
+                <h1>Administration</h1>
             </div>
-            <div class="card"><table id="tbl-categorie"><thead><tr><th>ID</th><th>Nom</th><th></th></tr></thead><tbody></tbody></table></div>
-        </section>
+            <button class="tab active" data-section="categorie">Catégories</button>
+            <button class="tab" data-section="formateur">Formateurs</button>
+            <button class="tab" data-section="formation">Formations</button>
+            <button class="tab" data-section="module">Modules</button>
+            <button class="tab" data-section="contenu">Contenus</button>
+            <button class="tab" data-section="user">Apprenants</button>
+            <button class="tab" data-section="session">Sessions &amp; inscriptions</button>
+        </nav>
 
-        <section class="section" id="sec-formateur">
-            <div class="section-head"><h2>Formateurs</h2><span class="count mono" id="count-formateur"></span></div>
-            <div class="card">
-                <h3>Ajouter un formateur</h3>
-                <div class="form-grid">
-                    <div><label>Nom</label><input id="for-nom" placeholder="Amrani"></div>
-                    <div><label>Prénom</label><input id="for-prenom" placeholder="Sara"></div>
-                    <div><label>Spécialité</label><input id="for-specialite" placeholder="Développement Web"></div>
+        <main>
+
+            <section class="section active" id="sec-categorie">
+                <div class="section-head"><h2>Catégories</h2><span class="count mono" id="count-categorie"></span></div>
+                <div class="card">
+                    <h3>Ajouter une catégorie</h3>
+                    <div class="form-grid"><div><label>Nom</label><input id="cat-nom" placeholder="Développement Web"></div></div>
+                    <button class="btn" onclick="addCategorie()">Ajouter</button>
                 </div>
-                <button class="btn" onclick="addFormateur()">Ajouter</button>
-            </div>
-            <div class="card"><table id="tbl-formateur"><thead><tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Spécialité</th><th></th></tr></thead><tbody></tbody></table></div>
-        </section>
+                <div class="card"><table id="tbl-categorie"><thead><tr><th>ID</th><th>Nom</th><th></th></tr></thead><tbody></tbody></table></div>
+            </section>
 
-        <section class="section" id="sec-formation">
-            <div class="section-head"><h2>Formations</h2><span class="count mono" id="count-formation"></span></div>
-            <div class="card">
-                <h3>Ajouter une formation</h3>
-                <div class="form-grid">
-                    <div><label>Nom</label><input id="form-nom" placeholder="ASP.NET Avancé"></div>
-                    <div><label>Formateur</label><select id="form-formateur"></select></div>
-                    <div><label>Catégorie</label><select id="form-categorie"></select></div>
-                </div>
-                <div style="margin-top:12px"><label>Description</label><textarea id="form-description"></textarea></div>
-                <button class="btn" onclick="addFormation()">Ajouter</button>
-            </div>
-            <div class="card"><table id="tbl-formation"><thead><tr><th>ID</th><th>Nom</th><th>Formateur</th><th>Catégorie</th><th></th></tr></thead><tbody></tbody></table></div>
-        </section>
-
-        <section class="section" id="sec-module">
-            <div class="section-head"><h2>Modules</h2><span class="count mono" id="count-module"></span></div>
-            <div class="card">
-                <h3>Ajouter un module</h3>
-                <div class="form-grid">
-                    <div><label>Titre</label><input id="mod-titre" placeholder="Introduction à ASP.NET Core"></div>
-                    <div><label>Formation</label><select id="mod-formation"></select></div>
-                    <div><label>Ordre</label><input id="mod-ordre" type="number" value="1"></div>
-                </div>
-                <div style="margin-top:12px"><label>Description</label><textarea id="mod-description"></textarea></div>
-                <button class="btn" onclick="addModule()">Ajouter</button>
-            </div>
-            <div class="card"><table id="tbl-module"><thead><tr><th>ID</th><th>Titre</th><th>Formation</th><th>Ordre</th><th></th></tr></thead><tbody></tbody></table></div>
-        </section>
-
-        <section class="section" id="sec-contenu">
-            <div class="section-head"><h2>Contenus (cours, exercices, examens)</h2><span class="count mono" id="count-contenu"></span></div>
-            <div class="card">
-                <h3>Ajouter un contenu</h3>
-                <div class="form-grid">
-                    <div><label>Titre</label><input id="con-titre" placeholder="Qu'est-ce que ASP.NET Core ?"></div>
-                    <div><label>Module</label><select id="con-module"></select></div>
-                    <div>
-                        <label>Type</label>
-                        <select id="con-type">
-                            <option value="Cours">Cours</option>
-                            <option value="Exercice">Exercice</option>
-                            <option value="Examen">Examen / Quiz</option>
-                        </select>
+            <section class="section" id="sec-formateur">
+                <div class="section-head"><h2>Formateurs</h2><span class="count mono" id="count-formateur"></span></div>
+                <div class="card">
+                    <h3>Ajouter un formateur</h3>
+                    <div class="form-grid">
+                        <div><label>Nom</label><input id="for-nom" placeholder="Amrani"></div>
+                        <div><label>Prénom</label><input id="for-prenom" placeholder="Sara"></div>
+                        <div><label>Spécialité</label><input id="for-specialite" placeholder="Développement Web"></div>
                     </div>
+                    <button class="btn" onclick="addFormateur()">Ajouter</button>
                 </div>
-                <div style="margin-top:12px"><label>Texte</label><textarea id="con-texte"></textarea></div>
-                <button class="btn" onclick="addContenu()">Ajouter</button>
-            </div>
-            <div class="card"><table id="tbl-contenu"><thead><tr><th>ID</th><th>Titre</th><th>Type</th><th>Module</th><th></th></tr></thead><tbody></tbody></table></div>
-        </section>
+                <div class="card"><table id="tbl-formateur"><thead><tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Spécialité</th><th></th></tr></thead><tbody></tbody></table></div>
+            </section>
 
-        <section class="section" id="sec-user">
-            <div class="section-head"><h2>Apprenants</h2><span class="count mono" id="count-user"></span></div>
-            <div class="card">
-                <h3>Ajouter un apprenant</h3>
-                <div class="form-grid">
-                    <div><label>Nom</label><input id="usr-nom" placeholder="Bennani"></div>
-                    <div><label>Prénom</label><input id="usr-prenom" placeholder="Youssef"></div>
-                    <div><label>Login</label><input id="usr-login" placeholder="youssef.bennani"></div>
-                    <div><label>Mot de passe</label><input id="usr-password" type="password"></div>
+            <section class="section" id="sec-formation">
+                <div class="section-head"><h2>Formations</h2><span class="count mono" id="count-formation"></span></div>
+                <div class="card">
+                    <h3>Ajouter une formation</h3>
+                    <div class="form-grid">
+                        <div><label>Nom</label><input id="form-nom" placeholder="ASP.NET Avancé"></div>
+                        <div><label>Formateur</label><select id="form-formateur"></select></div>
+                        <div><label>Catégorie</label><select id="form-categorie"></select></div>
+                    </div>
+                    <div style="margin-top:12px"><label>Description</label><textarea id="form-description"></textarea></div>
+                    <button class="btn" onclick="addFormation()">Ajouter</button>
                 </div>
-                <button class="btn" onclick="addUser()">Ajouter</button>
-            </div>
-            <div class="card"><table id="tbl-user"><thead><tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Login</th><th></th></tr></thead><tbody></tbody></table></div>
-        </section>
+                <div class="card"><table id="tbl-formation"><thead><tr><th>ID</th><th>Nom</th><th>Formateur</th><th>Catégorie</th><th></th></tr></thead><tbody></tbody></table></div>
+            </section>
 
-        <section class="section" id="sec-session">
-            <div class="section-head"><h2>Sessions &amp; inscriptions</h2><span class="count mono" id="count-session"></span></div>
-            <div class="card">
-                <h3>Créer une session</h3>
-                <div class="form-grid">
-                    <div><label>Formation</label><select id="ses-formation"></select></div>
-                    <div><label>Date début</label><input id="ses-debut" type="date"></div>
-                    <div><label>Date fin</label><input id="ses-fin" type="date"></div>
+            <section class="section" id="sec-module">
+                <div class="section-head"><h2>Modules</h2><span class="count mono" id="count-module"></span></div>
+                <div class="card">
+                    <h3>Ajouter un module</h3>
+                    <div class="form-grid">
+                        <div><label>Titre</label><input id="mod-titre" placeholder="Introduction à ASP.NET Core"></div>
+                        <div><label>Formation</label><select id="mod-formation"></select></div>
+                        <div><label>Ordre</label><input id="mod-ordre" type="number" value="1"></div>
+                    </div>
+                    <div style="margin-top:12px"><label>Description</label><textarea id="mod-description"></textarea></div>
+                    <button class="btn" onclick="addModule()">Ajouter</button>
                 </div>
-                <button class="btn" onclick="addSession()">Créer la session</button>
-            </div>
-            <div class="card">
-                <h3>Inscrire un apprenant à une session</h3>
-                <div class="form-grid">
-                    <div><label>Apprenant</label><select id="ins-user"></select></div>
-                    <div><label>Session</label><select id="ins-session"></select></div>
-                </div>
-                <button class="btn" onclick="inscrire()">Inscrire</button>
-            </div>
-            <div class="card"><table id="tbl-session"><thead><tr><th>ID</th><th>Formation</th><th>Début</th><th>Fin</th><th>Inscrits</th><th></th></tr></thead><tbody></tbody></table></div>
-        </section>
+                <div class="card"><table id="tbl-module"><thead><tr><th>ID</th><th>Titre</th><th>Formation</th><th>Ordre</th><th></th></tr></thead><tbody></tbody></table></div>
+            </section>
 
-    </main>
+            <section class="section" id="sec-contenu">
+                <div class="section-head"><h2>Contenus (cours, exercices, examens)</h2><span class="count mono" id="count-contenu"></span></div>
+                <div class="card">
+                    <h3>Ajouter un contenu</h3>
+                    <div class="form-grid">
+                        <div><label>Titre</label><input id="con-titre" placeholder="Qu'est-ce que ASP.NET Core ?"></div>
+                        <div><label>Module</label><select id="con-module"></select></div>
+                        <div>
+                            <label>Type</label>
+                            <select id="con-type">
+                                <option value="Cours">Cours</option>
+                                <option value="Exercice">Exercice</option>
+                                <option value="Examen">Examen / Quiz</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-top:12px"><label>Texte</label><textarea id="con-texte"></textarea></div>
+                    <button class="btn" onclick="addContenu()">Ajouter</button>
+                </div>
+                <div class="card"><table id="tbl-contenu"><thead><tr><th>ID</th><th>Titre</th><th>Type</th><th>Module</th><th></th></tr></thead><tbody></tbody></table></div>
+            </section>
+
+            <section class="section" id="sec-user">
+                <div class="section-head"><h2>Apprenants</h2><span class="count mono" id="count-user"></span></div>
+                <div class="card">
+                    <h3>Ajouter un apprenant</h3>
+                    <div class="form-grid">
+                        <div><label>Nom</label><input id="usr-nom" placeholder="Bennani"></div>
+                        <div><label>Prénom</label><input id="usr-prenom" placeholder="Youssef"></div>
+                        <div><label>Login</label><input id="usr-login" placeholder="youssef.bennani"></div>
+                        <div><label>Mot de passe</label><input id="usr-password" type="password"></div>
+                    </div>
+                    <button class="btn" onclick="addUser()">Ajouter</button>
+                </div>
+                <div class="card"><table id="tbl-user"><thead><tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Login</th><th></th></tr></thead><tbody></tbody></table></div>
+            </section>
+
+            <section class="section" id="sec-session">
+                <div class="section-head"><h2>Sessions &amp; inscriptions</h2><span class="count mono" id="count-session"></span></div>
+                <div class="card">
+                    <h3>Créer une session</h3>
+                    <div class="form-grid">
+                        <div><label>Formation</label><select id="ses-formation"></select></div>
+                        <div><label>Date début</label><input id="ses-debut" type="date"></div>
+                        <div><label>Date fin</label><input id="ses-fin" type="date"></div>
+                    </div>
+                    <button class="btn" onclick="addSession()">Créer la session</button>
+                </div>
+                <div class="card">
+                    <h3>Inscrire un apprenant à une session</h3>
+                    <div class="form-grid">
+                        <div><label>Apprenant</label><select id="ins-user"></select></div>
+                        <div><label>Session</label><select id="ins-session"></select></div>
+                    </div>
+                    <button class="btn" onclick="inscrire()">Inscrire</button>
+                </div>
+                <div class="card"><table id="tbl-session"><thead><tr><th>ID</th><th>Formation</th><th>Début</th><th>Fin</th><th>Inscrits</th><th></th></tr></thead><tbody></tbody></table></div>
+            </section>
+
+        </main>
+    </div>
 
     <div class="toast" id="toast"></div>
 
     <script>
-const API = '';
-function toast(msg, ok=true){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show ' + (ok ? 'ok' : 'err');
-  setTimeout(()=> t.className = 'toast', 2500);
-}
-async function api(path, options={}){
-  const res = await fetch(API + path, { headers:{'Content-Type':'application/json'}, ...options });
-  if(!res.ok){ const body = await res.text(); throw new Error(`${res.status} — ${body.slice(0,200)}`); }
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
-}
-function opt(id, label){ return `<option value="${id}">#${id} — ${label}</option>`; }
+        const API = '';
+        function toast(msg, ok = true) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast show ' + (ok ? 'ok' : 'err');
+            setTimeout(() => t.className = 'toast', 2500);
+        }
+        async function api(path, options = {}) {
+            const res = await fetch(API + path, { headers: { 'Content-Type': 'application/json' }, ...options });
+            if (!res.ok) { const body = await res.text(); throw new Error(`${res.status} — ${body.slice(0, 200)}`); }
+            const text = await res.text();
+            return text ? JSON.parse(text) : null;
+        }
+        function opt(id, label) { return `<option value="${id}">#${id} — ${label}</option>`; }
 
-document.querySelectorAll('.tab').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('sec-'+btn.dataset.section).classList.add('active');
-  });
-});
+        document.querySelectorAll('.tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('sec-' + btn.dataset.section).classList.add('active');
+            });
+        });
 
-async function loadCategories(){
-  const list = await api('/api/Categorie');
-  document.getElementById('count-categorie').textContent = list.length + ' au total';
-  document.getElementById('tbl-categorie').querySelector('tbody').innerHTML = list.length ? list.map(c=>`
-    <tr><td class="id-badge">#${c.id}</td><td>${c.nom}</td>
-    <td><button class="btn danger" onclick="delItem('Categorie',${c.id},loadCategories)">Supprimer</button></td></tr>
-  `).join('') : `<tr><td colspan="3" class="empty">Aucune catégorie pour l'instant.</td></tr>`;
-  document.getElementById('form-categorie').innerHTML = list.map(c=>opt(c.id, c.nom)).join('');
-}
-async function addCategorie(){
-  const nom = document.getElementById('cat-nom').value.trim();
-  if(!nom) return toast('Le nom est requis', false);
-  try{
-    await api('/api/Categorie', {method:'POST', body: JSON.stringify({id:0, nom, description:0})});
-    document.getElementById('cat-nom').value=''; toast('Catégorie ajoutée'); loadCategories();
-  }catch(e){ toast(e.message, false); }
-}
+        async function loadCategories() {
+            const list = await api('/api/Categorie');
+            document.getElementById('count-categorie').textContent = list.length + ' au total';
+            document.getElementById('tbl-categorie').querySelector('tbody').innerHTML = list.length ? list.map(c => `
+        <tr><td class="id-badge">#${c.id}</td><td>${c.nom}</td>
+        <td><button class="btn danger" onclick="delItem('Categorie',${c.id},loadCategories)">Supprimer</button></td></tr>
+      `).join('') : `<tr><td colspan="3" class="empty">Aucune catégorie pour l'instant.</td></tr>`;
+            document.getElementById('form-categorie').innerHTML = list.map(c => opt(c.id, c.nom)).join('');
+        }
+        async function addCategorie() {
+            const nom = document.getElementById('cat-nom').value.trim();
+            if (!nom) return toast('Le nom est requis', false);
+            try {
+                await api('/api/Categorie', { method: 'POST', body: JSON.stringify({ id: 0, nom, description: 0 }) });
+                document.getElementById('cat-nom').value = ''; toast('Catégorie ajoutée'); loadCategories();
+            } catch (e) { toast(e.message, false); }
+        }
 
-async function loadFormateurs(){
-  const list = await api('/api/Formateur');
-  document.getElementById('count-formateur').textContent = list.length + ' au total';
-  document.getElementById('tbl-formateur').querySelector('tbody').innerHTML = list.length ? list.map(f=>`
-    <tr><td class="id-badge">#${f.id}</td><td>${f.nom}</td><td>${f.prenom}</td><td>${f.specialite||''}</td>
-    <td><button class="btn danger" onclick="delItem('Formateur',${f.id},loadFormateurs)">Supprimer</button></td></tr>
-  `).join('') : `<tr><td colspan="5" class="empty">Aucun formateur pour l'instant.</td></tr>`;
-  document.getElementById('form-formateur').innerHTML = list.map(f=>opt(f.id, f.nom+' '+f.prenom)).join('');
-}
-async function addFormateur(){
-  const nom = document.getElementById('for-nom').value.trim();
-  const prenom = document.getElementById('for-prenom').value.trim();
-  const specialite = document.getElementById('for-specialite').value.trim();
-  if(!nom || !prenom) return toast('Nom et prénom requis', false);
-  try{
-    await api('/api/Formateur', {method:'POST', body: JSON.stringify({id:0, nom, prenom, specialite, formations:[]})});
-    ['for-nom','for-prenom','for-specialite'].forEach(id=>document.getElementById(id).value='');
-    toast('Formateur ajouté'); loadFormateurs();
-  }catch(e){ toast(e.message, false); }
-}
+        async function loadFormateurs() {
+            const list = await api('/api/Formateur');
+            document.getElementById('count-formateur').textContent = list.length + ' au total';
+            document.getElementById('tbl-formateur').querySelector('tbody').innerHTML = list.length ? list.map(f => `
+        <tr><td class="id-badge">#${f.id}</td><td>${f.nom}</td><td>${f.prenom}</td><td>${f.specialite || ''}</td>
+        <td><button class="btn danger" onclick="delItem('Formateur',${f.id},loadFormateurs)">Supprimer</button></td></tr>
+      `).join('') : `<tr><td colspan="5" class="empty">Aucun formateur pour l'instant.</td></tr>`;
+            document.getElementById('form-formateur').innerHTML = list.map(f => opt(f.id, f.nom + ' ' + f.prenom)).join('');
+        }
+        async function addFormateur() {
+            const nom = document.getElementById('for-nom').value.trim();
+            const prenom = document.getElementById('for-prenom').value.trim();
+            const specialite = document.getElementById('for-specialite').value.trim();
+            if (!nom || !prenom) return toast('Nom et prénom requis', false);
+            try {
+                await api('/api/Formateur', { method: 'POST', body: JSON.stringify({ id: 0, nom, prenom, specialite, formations: [] }) });
+                ['for-nom', 'for-prenom', 'for-specialite'].forEach(id => document.getElementById(id).value = '');
+                toast('Formateur ajouté'); loadFormateurs();
+            } catch (e) { toast(e.message, false); }
+        }
 
-async function loadFormations(){
-  const list = await api('/api/Formation');
-  document.getElementById('count-formation').textContent = list.length + ' au total';
-  document.getElementById('tbl-formation').querySelector('tbody').innerHTML = list.length ? list.map(f=>`
-    <tr><td class="id-badge">#${f.id}</td><td>${f.nom}</td><td>${f.formateur ? f.formateur.nom : (f.formateurId ?? '—')}</td><td>${f.categorie ? f.categorie.nom : (f.categorieId ?? '—')}</td>
-    <td><button class="btn danger" onclick="delItem('Formation',${f.id},loadFormations)">Supprimer</button></td></tr>
-  `).join('') : `<tr><td colspan="5" class="empty">Aucune formation pour l'instant.</td></tr>`;
-  document.getElementById('mod-formation').innerHTML = list.map(f=>opt(f.id, f.nom)).join('');
-  document.getElementById('ses-formation').innerHTML = list.map(f=>opt(f.id, f.nom)).join('');
-}
-async function addFormation(){
-  const nom = document.getElementById('form-nom').value.trim();
-  const description = document.getElementById('form-description').value.trim();
-  const formateurId = parseInt(document.getElementById('form-formateur').value);
-  const categorieId = parseInt(document.getElementById('form-categorie').value);
-  if(!nom || !formateurId || !categorieId) return toast('Nom, formateur et catégorie requis', false);
-  try{
-    await api('/api/Formation', {method:'POST', body: JSON.stringify({id:0, nom, description, formateurId, categorieId, sessions:[], modules:[]})});
-    document.getElementById('form-nom').value=''; document.getElementById('form-description').value='';
-    toast('Formation ajoutée'); loadFormations();
-  }catch(e){ toast(e.message, false); }
-}
+        async function loadFormations() {
+            const list = await api('/api/Formation');
+            document.getElementById('count-formation').textContent = list.length + ' au total';
+            document.getElementById('tbl-formation').querySelector('tbody').innerHTML = list.length ? list.map(f => `
+        <tr><td class="id-badge">#${f.id}</td><td>${f.nom}</td><td>${f.formateur ? f.formateur.nom : (f.formateurId ?? '—')}</td><td>${f.categorie ? f.categorie.nom : (f.categorieId ?? '—')}</td>
+        <td><button class="btn danger" onclick="delItem('Formation',${f.id},loadFormations)">Supprimer</button></td></tr>
+      `).join('') : `<tr><td colspan="5" class="empty">Aucune formation pour l'instant.</td></tr>`;
+            document.getElementById('mod-formation').innerHTML = list.map(f => opt(f.id, f.nom)).join('');
+            document.getElementById('ses-formation').innerHTML = list.map(f => opt(f.id, f.nom)).join('');
+        }
+        async function addFormation() {
+            const nom = document.getElementById('form-nom').value.trim();
+            const description = document.getElementById('form-description').value.trim();
+            const formateurId = parseInt(document.getElementById('form-formateur').value);
+            const categorieId = parseInt(document.getElementById('form-categorie').value);
+            if (!nom || !formateurId || !categorieId) return toast('Nom, formateur et catégorie requis', false);
+            try {
+                await api('/api/Formation', { method: 'POST', body: JSON.stringify({ id: 0, nom, description, formateurId, categorieId, sessions: [], modules: [] }) });
+                document.getElementById('form-nom').value = ''; document.getElementById('form-description').value = '';
+                toast('Formation ajoutée'); loadFormations();
+            } catch (e) { toast(e.message, false); }
+        }
 
-async function loadModules(){
-  const list = await api('/api/Module');
-  document.getElementById('count-module').textContent = list.length + ' au total';
-  document.getElementById('tbl-module').querySelector('tbody').innerHTML = list.length ? list.map(m=>`
-    <tr><td class="id-badge">#${m.id}</td><td>${m.titre}</td><td>${m.formationId ?? '—'}</td><td>${m.ordre}</td>
-    <td><button class="btn danger" onclick="delItem('Module',${m.id},loadModules)">Supprimer</button></td></tr>
-  `).join('') : `<tr><td colspan="5" class="empty">Aucun module pour l'instant.</td></tr>`;
-  document.getElementById('con-module').innerHTML = list.map(m=>opt(m.id, m.titre)).join('');
-}
-async function addModule(){
-  const titre = document.getElementById('mod-titre').value.trim();
-  const description = document.getElementById('mod-description').value.trim();
-  const formationId = parseInt(document.getElementById('mod-formation').value);
-  const ordre = parseInt(document.getElementById('mod-ordre').value) || 1;
-  if(!titre || !formationId) return toast('Titre et formation requis', false);
-  try{
-    await api('/api/Module', {method:'POST', body: JSON.stringify({id:0, titre, description, ordre, formationId, contenus:[]})});
-    document.getElementById('mod-titre').value=''; document.getElementById('mod-description').value='';
-    toast('Module ajouté'); loadModules();
-  }catch(e){ toast(e.message, false); }
-}
+        async function loadModules() {
+            const list = await api('/api/Module');
+            document.getElementById('count-module').textContent = list.length + ' au total';
+            document.getElementById('tbl-module').querySelector('tbody').innerHTML = list.length ? list.map(m => `
+        <tr><td class="id-badge">#${m.id}</td><td>${m.titre}</td><td>${m.formationId ?? '—'}</td><td>${m.ordre}</td>
+        <td><button class="btn danger" onclick="delItem('Module',${m.id},loadModules)">Supprimer</button></td></tr>
+      `).join('') : `<tr><td colspan="5" class="empty">Aucun module pour l'instant.</td></tr>`;
+            document.getElementById('con-module').innerHTML = list.map(m => opt(m.id, m.titre)).join('');
+        }
+        async function addModule() {
+            const titre = document.getElementById('mod-titre').value.trim();
+            const description = document.getElementById('mod-description').value.trim();
+            const formationId = parseInt(document.getElementById('mod-formation').value);
+            const ordre = parseInt(document.getElementById('mod-ordre').value) || 1;
+            if (!titre || !formationId) return toast('Titre et formation requis', false);
+            try {
+                await api('/api/Module', { method: 'POST', body: JSON.stringify({ id: 0, titre, description, ordre, formationId, contenus: [] }) });
+                document.getElementById('mod-titre').value = ''; document.getElementById('mod-description').value = '';
+                toast('Module ajouté'); loadModules();
+            } catch (e) { toast(e.message, false); }
+        }
 
-async function loadContenus(){
-  const list = await api('/api/Contenu');
-  document.getElementById('count-contenu').textContent = list.length + ' au total';
-  document.getElementById('tbl-contenu').querySelector('tbody').innerHTML = list.length ? list.map(c=>`
-    <tr><td class="id-badge">#${c.id}</td><td>${c.titre}</td><td>${c.type}</td><td>${c.moduleId ?? '—'}</td>
-    <td><button class="btn danger" onclick="delItem('Contenu',${c.id},loadContenus)">Supprimer</button></td></tr>
-  `).join('') : `<tr><td colspan="5" class="empty">Aucun contenu pour l'instant.</td></tr>`;
-}
-async function addContenu(){
-  const titre = document.getElementById('con-titre').value.trim();
-  const texte = document.getElementById('con-texte').value.trim();
-  const type = document.getElementById('con-type').value;
-  const moduleId = parseInt(document.getElementById('con-module').value);
-  if(!titre || !moduleId) return toast('Titre et module requis', false);
-  try{
-    await api('/api/Contenu', {method:'POST', body: JSON.stringify({id:0, titre, texte, type, moduleId})});
-    document.getElementById('con-titre').value=''; document.getElementById('con-texte').value='';
-    toast('Contenu ajouté'); loadContenus();
-  }catch(e){ toast(e.message, false); }
-}
+        async function loadContenus() {
+            const list = await api('/api/Contenu');
+            document.getElementById('count-contenu').textContent = list.length + ' au total';
+            document.getElementById('tbl-contenu').querySelector('tbody').innerHTML = list.length ? list.map(c => `
+        <tr><td class="id-badge">#${c.id}</td><td>${c.titre}</td><td>${c.type}</td><td>${c.moduleId ?? '—'}</td>
+        <td><button class="btn danger" onclick="delItem('Contenu',${c.id},loadContenus)">Supprimer</button></td></tr>
+      `).join('') : `<tr><td colspan="5" class="empty">Aucun contenu pour l'instant.</td></tr>`;
+        }
+        async function addContenu() {
+            const titre = document.getElementById('con-titre').value.trim();
+            const texte = document.getElementById('con-texte').value.trim();
+            const type = document.getElementById('con-type').value;
+            const moduleId = parseInt(document.getElementById('con-module').value);
+            if (!titre || !moduleId) return toast('Titre et module requis', false);
+            try {
+                await api('/api/Contenu', { method: 'POST', body: JSON.stringify({ id: 0, titre, texte, type, moduleId }) });
+                document.getElementById('con-titre').value = ''; document.getElementById('con-texte').value = '';
+                toast('Contenu ajouté'); loadContenus();
+            } catch (e) { toast(e.message, false); }
+        }
 
-async function loadUsers(){
-  const list = await api('/api/User');
-  document.getElementById('count-user').textContent = list.length + ' au total';
-  document.getElementById('tbl-user').querySelector('tbody').innerHTML = list.length ? list.map(u=>`
-    <tr><td class="id-badge">#${u.id}</td><td>${u.nom}</td><td>${u.prenom}</td><td>${u.login}</td>
-    <td><button class="btn danger" onclick="delItem('User',${u.id},loadUsers)">Supprimer</button></td></tr>
-  `).join('') : `<tr><td colspan="5" class="empty">Aucun apprenant pour l'instant.</td></tr>`;
-  document.getElementById('ins-user').innerHTML = list.map(u=>opt(u.id, u.nom+' '+u.prenom)).join('');
-}
-async function addUser(){
-  const nom = document.getElementById('usr-nom').value.trim();
-  const prenom = document.getElementById('usr-prenom').value.trim();
-  const login = document.getElementById('usr-login').value.trim();
-  const password = document.getElementById('usr-password').value;
-  if(!nom || !prenom || !login || !password) return toast('Tous les champs sont requis', false);
-  try{
-    await api('/api/User', {method:'POST', body: JSON.stringify({id:0, nom, prenom, login, password, sessions:[]})});
-    ['usr-nom','usr-prenom','usr-login','usr-password'].forEach(id=>document.getElementById(id).value='');
-    toast('Apprenant ajouté'); loadUsers();
-  }catch(e){ toast(e.message, false); }
-}
+        async function loadUsers() {
+            const list = await api('/api/User');
+            document.getElementById('count-user').textContent = list.length + ' au total';
+            document.getElementById('tbl-user').querySelector('tbody').innerHTML = list.length ? list.map(u => `
+        <tr><td class="id-badge">#${u.id}</td><td>${u.nom}</td><td>${u.prenom}</td><td>${u.login}</td>
+        <td><button class="btn danger" onclick="delItem('User',${u.id},loadUsers)">Supprimer</button></td></tr>
+      `).join('') : `<tr><td colspan="5" class="empty">Aucun apprenant pour l'instant.</td></tr>`;
+            document.getElementById('ins-user').innerHTML = list.map(u => opt(u.id, u.nom + ' ' + u.prenom)).join('');
+        }
+        async function addUser() {
+            const nom = document.getElementById('usr-nom').value.trim();
+            const prenom = document.getElementById('usr-prenom').value.trim();
+            const login = document.getElementById('usr-login').value.trim();
+            const password = document.getElementById('usr-password').value;
+            if (!nom || !prenom || !login || !password) return toast('Tous les champs sont requis', false);
+            try {
+                await api('/api/User', { method: 'POST', body: JSON.stringify({ id: 0, nom, prenom, login, password, sessions: [] }) });
+                ['usr-nom', 'usr-prenom', 'usr-login', 'usr-password'].forEach(id => document.getElementById(id).value = '');
+                toast('Apprenant ajouté'); loadUsers();
+            } catch (e) { toast(e.message, false); }
+        }
 
-async function loadSessions(){
-  const list = await api('/api/Session');
-  document.getElementById('count-session').textContent = list.length + ' au total';
-  document.getElementById('tbl-session').querySelector('tbody').innerHTML = list.length ? list.map(s=>`
-    <tr><td class="id-badge">#${s.id}</td><td>${s.formation ? s.formation.nom : (s.formationId ?? '—')}</td>
-    <td>${(s.dateDebut||'').slice(0,10)}</td><td>${(s.dateFin||'').slice(0,10)}</td>
-    <td>${(s.users||[]).length}</td>
-    <td><button class="btn danger" onclick="delItem('Session',${s.id},loadSessions)">Supprimer</button></td></tr>
-  `).join('') : `<tr><td colspan="6" class="empty">Aucune session pour l'instant.</td></tr>`;
-  document.getElementById('ins-session').innerHTML = list.map(s=>opt(s.id, (s.formation?s.formation.nom:('formation #'+s.formationId)))).join('');
-}
-async function addSession(){
-  const formationId = parseInt(document.getElementById('ses-formation').value);
-  const dateDebut = document.getElementById('ses-debut').value;
-  const dateFin = document.getElementById('ses-fin').value;
-  if(!formationId || !dateDebut || !dateFin) return toast('Formation et dates requises', false);
-  try{
-    await api('/api/Session', {method:'POST', body: JSON.stringify({id:0, dateDebut, dateFin, formationId, users:[]})});
-    toast('Session créée'); loadSessions();
-  }catch(e){ toast(e.message, false); }
-}
-async function inscrire(){
-  const userId = document.getElementById('ins-user').value;
-  const sessionId = document.getElementById('ins-session').value;
-  if(!userId || !sessionId) return toast('Choisis un apprenant et une session', false);
-  try{
-    await api(`/api/Session/inscrire?userId=${userId}&sessionId=${sessionId}`, {method:'POST'});
-    toast('Apprenant inscrit'); loadSessions();
-  }catch(e){ toast(e.message, false); }
-}
+        async function loadSessions() {
+            const list = await api('/api/Session');
+            document.getElementById('count-session').textContent = list.length + ' au total';
+            document.getElementById('tbl-session').querySelector('tbody').innerHTML = list.length ? list.map(s => `
+        <tr><td class="id-badge">#${s.id}</td><td>${s.formation ? s.formation.nom : (s.formationId ?? '—')}</td>
+        <td>${(s.dateDebut || '').slice(0, 10)}</td><td>${(s.dateFin || '').slice(0, 10)}</td>
+        <td>${(s.users || []).length}</td>
+        <td><button class="btn danger" onclick="delItem('Session',${s.id},loadSessions)">Supprimer</button></td></tr>
+      `).join('') : `<tr><td colspan="6" class="empty">Aucune session pour l'instant.</td></tr>`;
+            document.getElementById('ins-session').innerHTML = list.map(s => opt(s.id, (s.formation ? s.formation.nom : ('formation #' + s.formationId)))).join('');
+        }
+        async function addSession() {
+            const formationId = parseInt(document.getElementById('ses-formation').value);
+            const dateDebut = document.getElementById('ses-debut').value;
+            const dateFin = document.getElementById('ses-fin').value;
+            if (!formationId || !dateDebut || !dateFin) return toast('Formation et dates requises', false);
+            try {
+                await api('/api/Session', { method: 'POST', body: JSON.stringify({ id: 0, dateDebut, dateFin, formationId, users: [] }) });
+                toast('Session créée'); loadSessions();
+            } catch (e) { toast(e.message, false); }
+        }
+        async function inscrire() {
+            const userId = document.getElementById('ins-user').value;
+            const sessionId = document.getElementById('ins-session').value;
+            if (!userId || !sessionId) return toast('Choisis un apprenant et une session', false);
+            try {
+                await api(`/api/Session/inscrire?userId=${userId}&sessionId=${sessionId}`, { method: 'POST' });
+                toast('Apprenant inscrit'); loadSessions();
+            } catch (e) { toast(e.message, false); }
+        }
 
-async function delItem(entity, id, reload){
-  if(!confirm(`Supprimer l'élément #${id} ?`)) return;
-  try{
-    await api(`/api/${entity}/${id}`, {method:'DELETE'});
-    toast('Supprimé'); reload();
-  }catch(e){ toast(e.message, false); }
-}
+        async function delItem(entity, id, reload) {
+            if (!confirm(`Supprimer l'élément #${id} ?`)) return;
+            try {
+                await api(`/api/${entity}/${id}`, { method: 'DELETE' });
+                toast('Supprimé'); reload();
+            } catch (e) { toast(e.message, false); }
+        }
 
-(async function init(){
-  try{
-    await loadCategories(); await loadFormateurs(); await loadFormations();
-    await loadModules(); await loadContenus(); await loadUsers(); await loadSessions();
-  }catch(e){ toast('Erreur de chargement : ' + e.message, false); }
-})();
+        (async function init() {
+            try {
+                await loadCategories(); await loadFormateurs(); await loadFormations();
+                await loadModules(); await loadContenus(); await loadUsers(); await loadSessions();
+            } catch (e) { toast('Erreur de chargement : ' + e.message, false); }
+        })();
     </script>
 </body>
 </html>
