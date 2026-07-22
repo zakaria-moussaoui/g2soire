@@ -39,6 +39,7 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
+app.UseDefaultFiles();
 app.UseStaticFiles();
 
 // Swagger activé tout le temps (pratique pour tester en ligne)
